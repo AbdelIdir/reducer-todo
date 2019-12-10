@@ -52,7 +52,15 @@ function reducer(state, action) {
       };
 
     case CLEAR_COMPLETED:
-      return "hehe";
+      return {
+        ...state,
+
+        todoList: [
+          ...state.todoList.filter(task => {
+            return !task.completed;
+          })
+        ]
+      };
     default:
       return state;
   }
@@ -79,6 +87,10 @@ function App() {
     dispatch({ type: MARK_AS_COMPLETED_OR_NOT, payload: id });
   };
 
+  const onClearCOmpleted = () => {
+    dispatch({ type: CLEAR_COMPLETED });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -92,6 +104,10 @@ function App() {
               onChange={onValueChange}
             />
             <button>submit your task</button>
+            <br />
+            <button onClick={onClearCOmpleted}>
+              Clear the completed tasks
+            </button>
           </label>
         </form>
         <div className="todolist">
