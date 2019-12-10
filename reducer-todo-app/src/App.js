@@ -90,13 +90,16 @@ function App() {
   const onClearCOmpleted = () => {
     dispatch({ type: CLEAR_COMPLETED });
   };
+  var moment = require("moment");
+  moment().format();
 
+  var timeOfCompletion = moment().calendar();
   return (
     <div className="App">
       <header className="App-header">
         <form onSubmit={onFormSubmit}>
           <label>
-            <p>TODO LIST APP WITH REDUCER</p>
+            <p>TODO LIST APP WITH REDUCER </p>
             <input
               type="text"
               name="task"
@@ -114,14 +117,22 @@ function App() {
           <p>List of todos :</p>
           {state.todoList.map((todoTask, i) => {
             return (
-              <p
-                key={i}
-                className={`task_not_complete${todoTask.completed &&
-                  " task_complete"}`}
-                onClick={() => completedOrNot(todoTask.id)}
-              >
-                {todoTask.task}
-              </p>
+              <>
+                <div
+                  key={i}
+                  className={`task_not_complete${todoTask.completed &&
+                    " task_complete"}`}
+                  onClick={() => completedOrNot(todoTask.id)}
+                >
+                  {todoTask.task}
+                </div>
+                <p
+                  className={`task_complete_timer${!todoTask.completed &&
+                    " task_not_complete_timer"}`}
+                >
+                  Completed {timeOfCompletion}
+                </p>
+              </>
             );
           })}
         </div>

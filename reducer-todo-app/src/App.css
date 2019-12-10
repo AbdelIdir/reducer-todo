@@ -43,3 +43,14 @@
 .task_complete {
   text-decoration: line-through;
 }
+
+
+.task_not_complete_timer{
+
+display:none;
+}
+
+.task_complete_timer{
+
+text-decoration: wavy;
+}
