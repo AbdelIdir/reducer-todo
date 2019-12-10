@@ -34,7 +34,23 @@ function reducer(state, action) {
       };
 
     case MARK_AS_COMPLETED_OR_NOT:
-      return "haha";
+      return {
+        ...state,
+
+        todoList: [
+          ...state.todoList.map(item => {
+            if (item.id === action.payload) {
+              return {
+                ...item,
+                completed: !item.completed
+              };
+            } else {
+              return item;
+            }
+          })
+        ]
+      };
+
     case CLEAR_COMPLETED:
       return "hehe";
     default:
@@ -59,12 +75,16 @@ function App() {
     dispatch({ type: SUBMIT_ADD_A_TODO_NOTE, payload: state.task });
   };
 
+  const completedOrNot = id => {
+    dispatch({ type: MARK_AS_COMPLETED_OR_NOT, payload: id });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <form onSubmit={onFormSubmit}>
           <label>
-            TODO LIST APP WITH REDUCER
+            <p>TODO LIST APP WITH REDUCER</p>
             <input
               type="text"
               name="task"
@@ -75,9 +95,18 @@ function App() {
           </label>
         </form>
         <div className="todolist">
-          List of todos :
-          {state.todoList.map((item, i) => {
-            return <p key={i}>{item.task}</p>;
+          <p>List of todos :</p>
+          {state.todoList.map((todoTask, i) => {
+            return (
+              <p
+                key={i}
+                className={`task_not_complete${todoTask.completed &&
+                  " task_complete"}`}
+                onClick={() => completedOrNot(todoTask.id)}
+              >
+                {todoTask.task}
+              </p>
+            );
           })}
         </div>
       </header>
