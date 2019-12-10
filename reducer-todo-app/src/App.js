@@ -1,12 +1,10 @@
 import React, { useReducer } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import uuid from "uuid";
 
-const EmptyinitialStateTodoList = [{ id: uuid(), task: "", completed: false }];
-const todoList = [{ id: uuid(), task: "do some workout ", completed: false }];
-const initialSate = {
-  todoList
+const intialState = {
+  todoList: [],
+  task: ""
 };
 
 const INPUT_CHANGE = "INPUT_CHANGE";
@@ -22,7 +20,19 @@ function reducer(state, action) {
     case INPUT_CHANGE:
       return { ...state, [action.payload.name]: action.payload.value };
     case SUBMIT_ADD_A_TODO_NOTE:
-      return 1 + 1;
+      return {
+        ...state,
+        task: "",
+        todoList: [
+          ...state.todoList,
+          {
+            task: action.payload,
+            id: uuid(),
+            completed: false
+          }
+        ]
+      };
+
     case MARK_AS_COMPLETED_OR_NOT:
       return "haha";
     case CLEAR_COMPLETED:
@@ -33,9 +43,9 @@ function reducer(state, action) {
 }
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialSate);
+  const [state, dispatch] = useReducer(reducer, intialState);
 
-  const onvalueChange = event => {
+  const onValueChange = event => {
     const { name, value } = event.target;
 
     dispatch({
@@ -46,7 +56,7 @@ function App() {
 
   const onFormSubmit = event => {
     event.preventDefault();
-    dispatch({ type: SUBMIT_ADD_A_TODO_NOTE });
+    dispatch({ type: SUBMIT_ADD_A_TODO_NOTE, payload: state.task });
   };
 
   return (
@@ -59,11 +69,17 @@ function App() {
               type="text"
               name="task"
               value={state.task}
-              onChange={onvalueChange}
+              onChange={onValueChange}
             />
             <button>submit your task</button>
           </label>
         </form>
+        <div className="todolist">
+          List of todos :
+          {state.todoList.map((item, i) => {
+            return <p key={i}>{item.task}</p>;
+          })}
+        </div>
       </header>
     </div>
   );
